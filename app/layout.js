@@ -12,7 +12,7 @@ export default function RootLayout({ children }) {
         <header className="w-full p-5 bg-white shadow-md">
           <h1 className="float-left text-4xl font-bold text-black">Musical</h1>
           <button className="float-right px-8 py-3 rounded-full bg-[#9D8CF0] text-white font-semibold text-lg shadow-md hover:bg-[#8a77e8] hover:shadow-lg transition-all duration-200">
-            Login
+            <a href="/login">Login</a>
           </button>
         </header>
         <main>{children}</main>

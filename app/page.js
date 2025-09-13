@@ -16,7 +16,7 @@ export default function Home() {
               🎵 Start Building
             </button>
           </div>
-          
+
           <div className="w-full h-48 sm:h-64 bg-gray-300 rounded-lg shadow-md flex items-center justify-center order-first lg:order-last">
             <span className="text-gray-500 text-sm sm:text-base">Music visualizer here</span>
           </div>
@@ -49,12 +49,12 @@ export default function Home() {
               </div>
             </div>
 
-            <div className="bg-gradient-to-br from-purple-50 to-pink-50 border-2 border-purple-200 rounded-xl p-4 sm:p-6 shadow-lg hover:shadow-xl hover:border-purple-400 transition-all duration-300">
+            <div className="bg-gradient-to-br from-orange-50 to-red-50 border-2 border-orange-200 rounded-xl p-6 shadow-lg hover:shadow-xl hover:border-orange-400 transition-all duration-300">
               <div className="text-center">
-                <div className="text-4xl sm:text-5xl mb-3 sm:mb-4">🎧</div>
-                <div className="bg-purple-500 text-white px-3 py-1 rounded-full text-xs sm:text-sm font-bold mb-2 sm:mb-3 inline-block">20 HOURS</div>
-                <h3 className="text-lg sm:text-2xl text-black font-semibold mb-2">Premium Headphones ($100)</h3>
-                <p className="text-sm sm:text-lg text-gray-600">Experience music like never before with high-quality headphones.</p>
+                <div className="text-5xl mb-4">🎧</div>
+                <div className="bg-orange-500 text-white px-3 py-1 rounded-full text-sm font-bold mb-3 inline-block">20 HOURS</div>
+                <h3 className="text-2xl text-black font-semibold mb-2">$100 Headphones</h3>
+                <p className="text-lg text-gray-600">Premium headphones for the best audio experience while coding!</p>
               </div>
             </div>
 
