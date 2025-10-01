@@ -1,6 +1,6 @@
 import NextAuth from "next-auth";
 import SlackProvider from "next-auth/providers/slack";
-import { sql } from "@vercel/postgres";
+import { createClient } from "@vercel/postgres";
 
 export const authOptions = {
     providers: [
@@ -17,17 +17,26 @@ export const authOptions = {
     callbacks: {
         async signIn({ profile }) {
             if (!profile?.sub) return false;
+            const client = createClient();
+
             try {
-                await sql`
-          INSERT INTO users (slack_id, name, email, avatar)
-          VALUES (${profile.sub}, ${profile.name}, ${profile.email}, ${profile.picture})
-          ON CONFLICT (slack_id) 
-          DO UPDATE SET 
-            name = EXCLUDED.name, 
-            email = EXCLUDED.email, 
-            avatar = EXCLUDED.avatar,
-            updated_at = CURRENT_TIMESTAMP;
-        `;
+                // Connect the client
+                await client.connect();
+
+                // Use the client to execute the query
+                await client.sql`
+                  INSERT INTO users (slack_id, name, email, avatar)
+                  VALUES (${profile.sub}, ${profile.name}, ${profile.email}, ${profile.picture})
+                  ON CONFLICT (slack_id) 
+                  DO UPDATE SET 
+                    name = EXCLUDED.name, 
+                    email = EXCLUDED.email, 
+                    avatar = EXCLUDED.avatar,
+                    updated_at = CURRENT_TIMESTAMP;
+                `;
+
+                
+                await client.end();
                 return true;
             } catch (error) {
                 console.error("Error saving user:", error);
