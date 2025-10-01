@@ -1,3 +1,6 @@
+'use client';
+import {signIn} from "next-auth/react";
+
 export default function Login() {
     return (
         <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-br from-[#fff7ed] to-[#ede9fe]">
@@ -13,7 +16,9 @@ export default function Login() {
                 </div>
 
 
-                <button type="button" className="w-full px-6 py-4 bg-[#4A154B] hover:bg-[#3A1139] text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A154B] focus:ring-offset-2 transition-all duration-200 shadow-lg mb-4">
+                <button onClick={() => signIn("slack")}
+                    type="button"
+                    className="w-full px-6 py-4 bg-[#4A154B] hover:bg-[#3A1139] text-white font-bold rounded-lg focus:outline-none focus:ring-2 focus:ring-[#4A154B] focus:ring-offset-2 transition-all duration-200 shadow-lg mb-4">
                     <div className="flex items-center justify-center">
                         <span className="text-2xl mr-3"></span>
                         <span className="text-lg">Continue with Slack</span>

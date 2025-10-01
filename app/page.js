@@ -1,3 +1,6 @@
+'use client';
+import React from "react";
+
 export default function Home() {
   return (
     <>
@@ -12,7 +15,8 @@ export default function Home() {
               and make applications based on musical themes.
             </p>
 
-            <button className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200">
+            <button onClick={() => window.location.href = '/login'}
+            className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200">
               🎵 Start Building
             </button>
           </div>
