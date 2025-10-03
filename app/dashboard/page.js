@@ -3,15 +3,13 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-
 
 export default function DashboardPage() {
     const { data: session, status } = useSession();
     const router = useRouter();
     const [loading, setLoading] = useState(true);
     const [projects, setProjects] = useState([]);
-    const [timeToday, setTimeToday] = useState(0);
+    const [timeToday, setTimeToday] = useState("0m");
 
     useEffect(() => {
         if (status === "authenticated") {
@@ -19,27 +17,34 @@ export default function DashboardPage() {
                 fetch("/api/my-projects").then((res) => res.json()),
                 fetch("/api/hackatime").then((res) => res.json())
             ]).then(([projectData, timeData]) => {
-                setProjects(projectData);
-                if (timeData.timeToday) {
-                    setTimeToday(timeData.timeToday);
-                }
+                setProjects(Array.isArray(projectData) ? projectData : []);
+                setTimeToday(timeData.timeToday || "0m");
             }).catch(error => {
-                console.error("Failed to load dashboard data:", error);
+                console.error("Error fetching data:", error);
+                setProjects([]);
+                setTimeToday("0m");
             }).finally(() => {
                 setLoading(false);
             });
         }
     }, [status]);
+
     if (status === "loading" || loading) {
-        return <p className="text-center mt-10">Loading...</p>;
+        return (
+            <div className="flex justify-center items-center min-h-screen">
+                <div className="text-lg">Loading...</div>
+            </div>
+        );
     }
 
     if (status === "unauthenticated") {
         router.push("/login");
         return null;
     }
+
     return (
-       <div>
+        <div className="max-w-6xl mx-auto px-8 py-16">
+           
         </div>
     );
 }
