@@ -62,7 +62,7 @@ export default function DashboardPage() {
                                 <FontAwesomeIcon icon={faCode} className="text-white text-xl" />
                             </div>
 
-                            <p className="text-2xl font-medium text-gray-700 uppercase">Today's Coding Time
+                            <p className="text-2xl font-medium text-gray-700 uppercase">Today&apos;s Coding Time
                             <span className="text-xl font-bold text-gray-800 mt-1">: {timeToday}</span>
                             </p>
                         </div>
