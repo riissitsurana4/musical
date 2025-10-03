@@ -4,9 +4,7 @@ import { Pool } from 'pg';
 
 const pool = new Pool({
     connectionString: process.env.POSTGRES_URL,
-    ssl: {
-        rejectUnauthorized: false
-    }
+    ssl: false
 });
 
 export const authOptions = {
@@ -22,7 +20,6 @@ export const authOptions = {
     },
 
     secret: process.env.NEXTAUTH_SECRET,
-    debug: true,
 
     callbacks: {
         async signIn({ profile }) {
@@ -45,7 +42,7 @@ export const authOptions = {
                 return true;
             } catch (error) {
                 console.error("Error saving user:", error);
-                return true;
+                return false;
             }
         },
         async jwt({ token, profile }) {

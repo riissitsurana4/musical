@@ -5,9 +5,7 @@ import { Pool } from 'pg';
 
 const pool = new Pool({
     connectionString: process.env.POSTGRES_URL,
-    ssl: {
-        rejectUnauthorized: false
-    }
+    ssl: false 
 });
 
 export async function GET() {
@@ -16,13 +14,15 @@ export async function GET() {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
+    if (!session.user?.slack_id) {
+        return NextResponse.json({ error: "User not properly authenticated" }, { status: 401 });
+    }
+
     try {
         const { rows: projects } = await pool.query(`
-            SELECT p.*, u.name as author_name 
-            FROM projects p
-            JOIN users u ON u.slack_id = $1
-            WHERE p.user_id = u.id
-            ORDER BY p.created_at DESC
+            SELECT * FROM projects 
+            WHERE author_slack_id = $1 
+            ORDER BY created_at DESC
         `, [session.user.slack_id]);
         
         return NextResponse.json(projects);

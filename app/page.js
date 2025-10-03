@@ -4,6 +4,16 @@ import React from "react";
 export default function Home() {
   return (
     <>
+      <header className="w-full p-4 sm:p-5 bg-white shadow-md">
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3">
+          <h1 className="text-2xl sm:text-4xl font-bold text-black">Musical</h1>
+          <a href="/login"
+            className="px-6 py-2 sm:px-8 sm:py-3 rounded-full bg-[#9D8CF0] text-white font-semibold text-sm sm:text-lg shadow-md hover:bg-[#8a77e8] hover:shadow-lg transition-all duration-200">
+            Login
+          </a>
+        </div>
+        <div className="clear-both"></div>
+      </header>
       <section className="w-full bg-gradient-to-br from-[#fff7ed] to-[#ede9fe] py-8 sm:py-16">
         <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 items-center px-4 sm:px-8">
           <div className="space-y-4 sm:space-y-6 text-center lg:text-left">
@@ -16,7 +26,7 @@ export default function Home() {
             </p>
 
             <button onClick={() => window.location.href = '/login'}
-            className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200">
+              className="w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white font-bold rounded-lg hover:from-purple-600 hover:to-pink-600 transition-all duration-200">
               🎵 Start Building
             </button>
           </div>

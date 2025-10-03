@@ -31,8 +31,11 @@ export default function DashboardPage() {
 
     if (status === "loading" || loading) {
         return (
-            <div className="flex justify-center items-center min-h-screen">
-                <div className="text-lg">Loading...</div>
+             <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
+                <div className="text-center">
+                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent mx-auto mb-4"></div>
+                    <p className="text-lg text-gray-600">Loading your dashboard...</p>
+                </div>
             </div>
         );
     }
@@ -43,7 +46,7 @@ export default function DashboardPage() {
     }
 
     return (
-        <div className="max-w-6xl mx-auto px-8 py-16">
+        <div className="bg-white">
            
         </div>
     );
