@@ -1,0 +1,70 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  slackId   String   @unique @map("slack_id")
+  name      String
+  email     String   @unique
+  avatar    String?
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  projects    Project[]
+  userRewards UserReward[] 
+
+  @@map("users")
+}
+
+model Project {
+  id            Int     @id @default(autoincrement())
+  name          String
+  description   String
+  repositoryUrl String? @map("repository_url")
+  userSlackId   String  @map("user_slack_id")
+
+  // Hackatime integration fields
+  hackatimeProject String? @map("hackatime_project")
+  hackatimeTime    String? @map("hackatime_time")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  // Relations
+  user User @relation(fields: [userSlackId], references: [slackId], onDelete: Cascade)
+
+  @@map("projects")
+}
+
+model Reward {
+  id            Int      @id @default(autoincrement())
+  name          String
+  description   String?
+  requiredHours Int      @map("required_hours")
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  // Relations
+  userRewards UserReward[]
+
+  @@map("rewards")
+}
+
+model UserReward {
+  id          Int      @id @default(autoincrement())
+  userSlackId String   @map("user_slack_id")
+  rewardId    Int      @map("reward_id")
+  claimedAt   DateTime @default(now()) @map("claimed_at")
+
+  // Relations
+  user   User   @relation(fields: [userSlackId], references: [slackId], onDelete: Cascade)
+  reward Reward @relation(fields: [rewardId], references: [id], onDelete: Cascade)
+
+  @@map("user_rewards")
+}

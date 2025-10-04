@@ -1,11 +1,7 @@
 import NextAuth from "next-auth";
 import SlackProvider from "next-auth/providers/slack";
-import { Pool } from 'pg';
+import { prisma } from '@/lib/prisma';
 
-const pool = new Pool({
-    connectionString: process.env.POSTGRES_URL,
-    ssl: false
-});
 
 export const authOptions = {
     providers: [
@@ -26,19 +22,24 @@ export const authOptions = {
             if (!profile?.sub) return false;
             
             try {
-                const result = await pool.query(`
-                    INSERT INTO users (slack_id, name, email, avatar)
-                    VALUES ($1, $2, $3, $4)
-                    ON CONFLICT (slack_id) 
-                    DO UPDATE SET 
-                        name = EXCLUDED.name, 
-                        email = EXCLUDED.email, 
-                        avatar = EXCLUDED.avatar,
-                        updated_at = CURRENT_TIMESTAMP
-                    RETURNING id;
-                `, [profile.sub, profile.name, profile.email, profile.picture]);
+                const user = await prisma.user.upsert({
+                    where: {
+                        slackId: profile.sub
+                    },
+                    update: {
+                        name: profile.name,
+                        email: profile.email,
+                        avatar: profile.picture,
+                    },
+                    create: {
+                        slackId: profile.sub,
+                        name: profile.name,
+                        email: profile.email,
+                        avatar: profile.picture,
+                    },
+                });
                 
-                console.log("User saved successfully:", result.rows[0]);
+                console.log("User saved successfully:", user.id);
                 return true;
             } catch (error) {
                 console.error("Error saving user:", error);

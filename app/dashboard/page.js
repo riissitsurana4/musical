@@ -1,51 +1,66 @@
 'use client';
 
-import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faCode, faFolder, faTrophy } from "@fortawesome/free-solid-svg-icons";
+import { useState, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import { useRouter } from 'next/navigation';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faPlus, faClock, faCode, faSpinner, faFolder, faTrophy } from '@fortawesome/free-solid-svg-icons';
 
-export default function DashboardPage() {
+export default function Dashboard() {
     const { data: session, status } = useSession();
     const router = useRouter();
+    const [todaysStats, setTodaysStats] = useState({
+        timeToday: "0m",
+        projectCount: 0,
+        projects: []
+    });
+    const [hackatimeToday, setHackatimeToday] = useState("0m");
     const [loading, setLoading] = useState(true);
-    const [projects, setProjects] = useState([]);
-    const [timeToday, setTimeToday] = useState("0m");
 
     useEffect(() => {
-        if (status === "authenticated") {
-            Promise.all([
-                fetch("/api/my-projects").then((res) => res.json()),
-                fetch("/api/hackatime").then((res) => res.json())
-            ]).then(([projectData, timeData]) => {
-                setProjects(Array.isArray(projectData) ? projectData : []);
-                setTimeToday(timeData.timeToday || "0m");
-            }).catch(error => {
-                console.error("Error fetching data:", error);
-                setProjects([]);
-                setTimeToday("0m");
-            }).finally(() => {
-                setLoading(false);
-            });
+        if (session) {
+            fetchDashboardData();
         }
-    }, [status]);
+    }, [session]);
 
-    if (status === "loading" || loading) {
+    const fetchDashboardData = async () => {
+        setLoading(true);
+        try {
+            const todayResponse = await fetch('/api/hackatime?type=today');
+            const todayData = await todayResponse.json();
+            setTodaysStats(todayData);
+
+            const hackatimeResponse = await fetch('/api/hackatime');
+            const hackatimeData = await hackatimeResponse.json();
+            setHackatimeToday(hackatimeData.timeToday || "0m");
+
+        } catch (error) {
+            console.error('Error fetching dashboard data:', error);
+        }
+        setLoading(false);
+    };
+
+    if (status === 'loading') {
         return (
-            <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 flex items-center justify-center">
+            <div className="min-h-screen flex items-center justify-center">
+                <FontAwesomeIcon icon={faSpinner} className="text-4xl text-purple-500 animate-spin" />
+            </div>
+        );
+    }
+
+    if (status === 'unauthenticated') {
+        return (
+            <div className="min-h-screen flex items-center justify-center">
                 <div className="text-center">
-                    <div className="animate-spin rounded-full h-12 w-12 border-4 border-purple-500 border-t-transparent mx-auto mb-4"></div>
-                    <p className="text-lg text-gray-600">Loading your dashboard...</p>
+                    <h1 className="text-2xl font-bold text-gray-900 mb-4">Please log in</h1>
+                    <p className="text-gray-600">You need to be logged in to access the dashboard.</p>
                 </div>
             </div>
         );
     }
 
-    if (status === "unauthenticated") {
-        router.push("/login");
-        return null;
-    }
+    const timeToday = todaysStats.timeToday;
+    const projects = todaysStats.projects;
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-8">
@@ -53,9 +68,8 @@ export default function DashboardPage() {
                 Welcome back, {session.user.name}! 
             </h2>
 
-            
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="group bg-white rounded-xl shadow-sm p-6 border border-gray-100 ">
+                <div className="group bg-white rounded-l shadow-sm p-6 border border-gray-100 ">
                     <div className="flex items-center justify-between">
                         <div>
                             <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-4">
@@ -69,7 +83,7 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                <div className="group bg-white rounded-xl shadow-sm p-6 border border-gray-100">
+                <div className="group bg-white rounded-l shadow-sm p-6 border border-gray-100">
                     <div className="flex items-center justify-between">
                         <div>
                             <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4">
@@ -82,13 +96,13 @@ export default function DashboardPage() {
                     </div>
                 </div>
 
-                <div className="group bg-white rounded-xl shadow-sm  p-6 border border-gray-100">
+                <div className="group bg-white rounded-l shadow-sm  p-6 border border-gray-100">
                     <div className="flex items-center justify-between">
                         <div>
                             <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-4">
                                 <FontAwesomeIcon icon={faTrophy} className="text-white text-xl" />
                             </div>
-                            <p className="text-2xl font-medium text-gray-700 uppercase">Rewards Earned:
+                            <p className="text-2xl font-medium text-gray-700 uppercase">Rewards Earned
                                 <span className="text-xl font-bold text-gray-800 mt-1">: 0</span>
                             </p>
                         </div>
