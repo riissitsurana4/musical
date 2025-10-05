@@ -88,7 +88,7 @@ export default function Dashboard() {
                             <FontAwesomeIcon icon={faCode} className="text-black text-xl" />
                         </div>
                         <div className="flex-1">
-                            <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Today's Coding Time</h3>
+                            <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Today&apos;s Coding Time</h3>
                             <p className="text-3xl font-bold text-gray-900 mt-1">{timeToday}</p>
                             <p className="text-xs text-gray-400 mt-1">Active coding session</p>
                         </div>
