@@ -14,6 +14,7 @@ export default function Dashboard() {
         projectCount: 0,
         projects: []
     });
+    const [totalProjects, setTotalProjects] = useState(0);
     const [hackatimeToday, setHackatimeToday] = useState("0m");
     const [loading, setLoading] = useState(true);
 
@@ -34,6 +35,10 @@ export default function Dashboard() {
             const hackatimeData = await hackatimeResponse.json();
             setHackatimeToday(hackatimeData.timeToday || "0m");
 
+            const projectsResponse = await fetch('/api/my-projects');
+            const projectsData = await projectsResponse.json();
+            setTotalProjects(projectsData.length);
+
         } catch (error) {
             console.error('Error fetching dashboard data:', error);
         }
@@ -43,7 +48,7 @@ export default function Dashboard() {
     if (status === 'loading') {
         return (
             <div className="min-h-screen flex items-center justify-center">
-                <FontAwesomeIcon icon={faSpinner} className="text-4xl text-purple-500 animate-spin" />
+                <p>Loading...</p>
             </div>
         );
     }
@@ -60,51 +65,58 @@ export default function Dashboard() {
     }
 
     const timeToday = todaysStats.timeToday;
-    const projects = todaysStats.projects;
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50 p-8">
-            <h2 className="text-3xl font-bold mb-6 text-gray-800">
-                Welcome back, {session.user.name}! 
-            </h2>
+            <div className="flex items-center justify-between mb-6">
+                <h2 className="text-3xl font-bold text-gray-800">
+                    Welcome back, {session.user.name}! 
+                </h2>
+                <button
+                    onClick={() => router.push('/dashboard/projects')}
+                    className="px-6 py-3 bg-purple-600 text-white rounded-lg font-medium"
+                >
+                    <FontAwesomeIcon icon={faPlus} className="mr-2" />
+                    Submit Project
+                </button>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-                <div className="group bg-white rounded-l shadow-sm p-6 border border-gray-100 ">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="w-12 h-12 bg-gradient-to-r from-purple-500 to-purple-600 rounded-xl flex items-center justify-center mb-4">
-                                <FontAwesomeIcon icon={faCode} className="text-white text-xl" />
-                            </div>
-
-                            <p className="text-2xl font-medium text-gray-700 uppercase">Today&apos;s Coding Time
-                            <span className="text-xl font-bold text-gray-800 mt-1">: {timeToday}</span>
-                            </p>
+                <div className="group bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+                    <div className="flex items-center space-x-4">
+                        <div className="w-14 h-14 rounded-xl flex items-center justify-center">
+                            <FontAwesomeIcon icon={faCode} className="text-black text-xl" />
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Today's Coding Time</h3>
+                            <p className="text-3xl font-bold text-gray-900 mt-1">{timeToday}</p>
+                            <p className="text-xs text-gray-400 mt-1">Active coding session</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="group bg-white rounded-l shadow-sm p-6 border border-gray-100">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="w-12 h-12 bg-gradient-to-r from-blue-500 to-blue-600 rounded-xl flex items-center justify-center mb-4">
-                                <FontAwesomeIcon icon={faFolder} className="text-white text-xl" />
-                            </div>
-                            <p className="text-2xl font-medium text-gray-700 uppercase">Projects
-                                <span className="text-xl font-bold text-gray-800 mt-1">: {projects.length}</span>
-                            </p>
+                <div className="group bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+                    <div className="flex items-center space-x-4">
+                        <div className="w-14 h-14 rounded-xl flex items-center justify-center">
+                            <FontAwesomeIcon icon={faFolder} className="text-black text-xl" />
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Projects Built</h3>
+                            <p className="text-3xl font-bold text-gray-900 mt-1">{totalProjects}</p>
+                            <p className="text-xs text-gray-400 mt-1">Total submissions</p>
                         </div>
                     </div>
                 </div>
 
-                <div className="group bg-white rounded-l shadow-sm  p-6 border border-gray-100">
-                    <div className="flex items-center justify-between">
-                        <div>
-                            <div className="w-12 h-12 bg-gradient-to-r from-green-500 to-green-600 rounded-xl flex items-center justify-center mb-4">
-                                <FontAwesomeIcon icon={faTrophy} className="text-white text-xl" />
-                            </div>
-                            <p className="text-2xl font-medium text-gray-700 uppercase">Rewards Earned
-                                <span className="text-xl font-bold text-gray-800 mt-1">: 0</span>
-                            </p>
+                <div className="group bg-white rounded-lg shadow-sm p-6 border border-gray-100">
+                    <div className="flex items-center space-x-4">
+                        <div className="w-14 h-14 rounded-xl flex items-center justify-center">
+                            <FontAwesomeIcon icon={faTrophy} className="text-black text-xl" />
+                        </div>
+                        <div className="flex-1">
+                            <h3 className="text-sm font-medium text-gray-500 uppercase tracking-wide">Achievements</h3>
+                            <p className="text-3xl font-bold text-gray-900 mt-1">0</p>
+                            <p className="text-xs text-gray-400 mt-1">Rewards unlocked</p>
                         </div>
                     </div>
                 </div>
