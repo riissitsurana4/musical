@@ -56,7 +56,7 @@ export default function Home() {
               <div className="text-center">
                 <div className="text-5xl mb-4 group-hover:animate-bounce"></div>
                 <h3 className="text-xl font-bold text-gray-800 mb-2">Sketch Wireframes</h3>
-                <p className="text-gray-600">Draw rough layouts for your app's interface.</p>
+                <p className="text-gray-600">Draw rough layouts for your app&apos;s interface.</p>
               </div>
             </div>
 
