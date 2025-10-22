@@ -1,13 +1,11 @@
 
 import "./globals.css";
-import Provider from "./provider";
 
 
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
       <body className="flex min-h-screen flex-col bg-white">
-        <Provider>
           
           
           <main className="flex-1">{children}</main>
@@ -20,7 +18,6 @@ export default function RootLayout({ children }) {
               </a>
             </p>
           </footer>
-        </Provider>
       </body>
     </html>
   );
